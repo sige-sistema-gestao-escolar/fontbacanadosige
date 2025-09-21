@@ -1,0 +1,48 @@
+/* estilos globais da aplicacao */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased; /* deixa as fontes mais suaves no mac */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* estilos para codigo inline */
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* gradiente customizado pro projeto (nao usado mais) */
+.bg-custom-gradient {
+  background: linear-gradient(135deg, #1e3a8a 0%, #ea580c 100%);
+}
+
+/* estilos dos botoes de tipo de usuario */
+.user-type-btn {
+  transition: all 0.3s ease; /* animacao suave */
+}
+
+.user-type-btn:hover {
+  transform: translateY(-2px); /* sobe um pouquinho no hover */
+}
+
+/* efeito hover dos cards dos dashboards */
+.card-hover:hover {
+  transform: translateY(-5px); /* sobe mais que o botao */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* sombra mais pronunciada */
+  border: 1px solid rgba(249, 115, 22, 0.3); /* borda laranja sutil */
+}
+
+/* estilos da area de upload de arquivo */
+.file-upload {
+  border: 2px dashed #1e3a8a; /* borda tracejada azul */
+  background-color: rgba(30, 58, 138, 0.05); /* fundo azul bem claro */
+  transition: all 0.3s ease; /* animacao suave */
+}
+
+.file-upload:hover {
+  border-color: #f97316; /* muda pra laranja no hover */
+  background-color: rgba(249, 115, 22, 0.05); /* fundo laranja claro no hover */
+}
