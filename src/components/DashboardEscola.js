@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const DashboardEscola = () => {
+  const [disciplinaModal, setDisciplinaModal] = useState(false);
   const [registrarAulaModal, setRegistrarAulaModal] = useState(false);
   const [registrarNotasModal, setRegistrarNotasModal] = useState(false);
   const [relatorioConteudoModal, setRelatorioConteudoModal] = useState(false);
@@ -17,6 +18,9 @@ const DashboardEscola = () => {
   const [buscaAlunos, setBuscaAlunos] = useState('');
   const [filtroDisciplina, setFiltroDisciplina] = useState('todos');
   const [filtroTurma, setFiltroTurma] = useState('todos');
+  const [perfilMenu, setPerfilMenu] = useState(false);
+  const [disciplinaSelecionada, setDisciplinaSelecionada] = useState('');
+  const [acaoSelecionada, setAcaoSelecionada] = useState(''); // 'aula' ou 'nota'
 
   const [aulaData, setAulaData] = useState({
     disciplina: '',
@@ -40,12 +44,14 @@ const DashboardEscola = () => {
     nome: '',
     cpf: '',
     email: '',
+    matricula: '',
     disciplina: ''
   });
 
   const [alunoData, setAlunoData] = useState({
     nome: '',
     email: '',
+    matricula: '',
     turma: '',
     escola: ''
   });
@@ -72,6 +78,13 @@ const DashboardEscola = () => {
     { id: 4, nome: 'BIANCA LORRANNY FIDALGO DE SOUSA', ra: '71541225562', presente: true },
     { id: 5, nome: 'BRENO RAFAEL LEMOS NUNES', ra: '71246141671', presente: true }
   ]);
+
+  // disciplinas disponiveis
+  const disciplinas = [
+    'Matemática', 'Português', 'História', 'Geografia', 'Ciências', 
+    'Física', 'Química', 'Biologia', 'Educação Física', 'Artes', 
+    'Inglês', 'Espanhol', 'Filosofia', 'Sociologia'
+  ];
 
   const handleAulaChange = (e) => {
     const { name, value } = e.target;
@@ -157,14 +170,44 @@ const DashboardEscola = () => {
     e.preventDefault();
     console.log('Dados do professor:', professorData);
     setGerenciarProfessoresModal(false);
-    setProfessorData({ nome: '', cpf: '', email: '', disciplina: '' });
+    setProfessorData({ nome: '', cpf: '', email: '', matricula: '', disciplina: '' });
   };
 
   const handleAlunoSubmit = (e) => {
     e.preventDefault();
     console.log('Dados do aluno:', alunoData);
     setGerenciarAlunosModal(false);
-    setAlunoData({ nome: '', email: '', turma: '', escola: '' });
+    setAlunoData({ nome: '', email: '', matricula: '', turma: '', escola: '' });
+  };
+
+  // funcoes para disciplina
+  const handleDisciplinaAcao = (acao) => {
+    setAcaoSelecionada(acao);
+    setDisciplinaModal(true);
+  };
+
+  const handleDisciplinaSubmit = () => {
+    if (!disciplinaSelecionada) {
+      mostrarNotificacao('error', 'Selecione uma disciplina!');
+      return;
+    }
+
+    // atualiza os dados com a disciplina selecionada
+    setAulaData(prev => ({ ...prev, disciplina: disciplinaSelecionada }));
+    setNotasData(prev => ({ ...prev, disciplina: disciplinaSelecionada }));
+
+    setDisciplinaModal(false);
+
+    // abre o modal correspondente
+    if (acaoSelecionada === 'aula') {
+      setRegistrarAulaModal(true);
+    } else if (acaoSelecionada === 'nota') {
+      setRegistrarNotasModal(true);
+    }
+
+    // limpa selecoes
+    setDisciplinaSelecionada('');
+    setAcaoSelecionada('');
   };
 
   useEffect(() => {
@@ -172,7 +215,21 @@ const DashboardEscola = () => {
     if (window.feather) {
       window.feather.replace();
     }
-  }, [registrarAulaModal, presencaModal, previewModal, gerenciarProfessoresModal, gerenciarAlunosModal, notificacao.show]);
+  }, [disciplinaModal, registrarAulaModal, presencaModal, previewModal, gerenciarProfessoresModal, gerenciarAlunosModal, notificacao.show, perfilMenu]);
+
+  // fechar menu de perfil quando clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (perfilMenu && !event.target.closest('.relative')) {
+        setPerfilMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [perfilMenu]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -200,8 +257,41 @@ const DashboardEscola = () => {
             </div>
             <div className="flex items-center space-x-4">
               <span className="hidden md:block">Bem-vindo, Administrador</span>
-              <div className="w-10 h-10 rounded-full bg-indigo-400 flex items-center justify-center">
-                <i data-feather="user" className="w-5 h-5"></i>
+              <div className="relative">
+                <button 
+                  onClick={() => setPerfilMenu(!perfilMenu)}
+                  className="w-10 h-10 rounded-full bg-indigo-400 flex items-center justify-center hover:bg-indigo-500 transition-colors duration-200"
+                >
+                  <i data-feather="user" className="w-5 h-5"></i>
+                </button>
+                
+                {/* Menu do Perfil */}
+                {perfilMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900">Administrador</p>
+                      <p className="text-xs text-gray-500">admin@escola.com</p>
+                    </div>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                      <i data-feather="user" className="w-4 h-4"></i>
+                      <span>Meu Perfil</span>
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                      <i data-feather="settings" className="w-4 h-4"></i>
+                      <span>Configurações</span>
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                      <i data-feather="help-circle" className="w-4 h-4"></i>
+                      <span>Ajuda</span>
+                    </button>
+                    <div className="border-t border-gray-100 mt-1 pt-1">
+                      <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2">
+                        <i data-feather="log-out" className="w-4 h-4"></i>
+                        <span>Sair</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -211,41 +301,34 @@ const DashboardEscola = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Card 1: Registrar/Alterar Aula */}
-          <div className="bg-white rounded-xl shadow-md overflow-hidden card-hover transition-all duration-300 cursor-pointer">
+          {/* Card 1: Disciplinas */}
+          <div className="bg-white rounded-xl shadow-md overflow-hidden card-hover transition-all duration-300">
             <div className="p-6">
               <div className="flex items-center mb-4">
-                <div className="p-3 rounded-full bg-green-100 text-green-600 mr-4">
-                  <i data-feather="calendar" className="w-6 h-6"></i>
+                <div className="p-3 rounded-full bg-gradient-to-r from-green-100 to-blue-100 text-green-600 mr-4">
+                  <i data-feather="book-open" className="w-6 h-6"></i>
                 </div>
-                <h2 className="text-xl font-semibold text-gray-800">Registrar/Alterar Aula</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Disciplinas</h2>
               </div>
-              <p className="text-gray-600 mb-6">Registre ou altere o conteúdo e observações das aulas.</p>
-              <button 
-                onClick={() => setRegistrarAulaModal(true)}
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors duration-300 hover:shadow-md"
-              >
-                Acessar
-              </button>
-            </div>
-          </div>
-
-          {/* Card 2: Registrar/Alterar Notas */}
-          <div className="bg-white rounded-xl shadow-md overflow-hidden card-hover transition-all duration-300 cursor-pointer">
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <div className="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
-                  <i data-feather="edit-3" className="w-6 h-6"></i>
-                </div>
-                <h2 className="text-xl font-semibold text-gray-800">Registrar/Alterar Notas</h2>
+              <p className="text-gray-600 mb-6">Gerencie aulas e notas por disciplina específica.</p>
+              
+              <div className="space-y-3">
+                <button 
+                  onClick={() => handleDisciplinaAcao('aula')}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors duration-300 hover:shadow-md flex items-center justify-center space-x-2"
+                >
+                  <i data-feather="calendar" className="w-4 h-4"></i>
+                  <span>Registrar Aula</span>
+                </button>
+                
+                <button 
+                  onClick={() => handleDisciplinaAcao('nota')}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors duration-300 hover:shadow-md flex items-center justify-center space-x-2"
+                >
+                  <i data-feather="edit-3" className="w-4 h-4"></i>
+                  <span>Registrar Notas</span>
+                </button>
               </div>
-              <p className="text-gray-600 mb-6">Lance ou altere as notas dos alunos por disciplina e bimestre.</p>
-              <button 
-                onClick={() => setRegistrarNotasModal(true)}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors duration-300 hover:shadow-md"
-              >
-                Acessar
-              </button>
             </div>
           </div>
 
@@ -346,6 +429,71 @@ const DashboardEscola = () => {
         </div>
       </main>
 
+      {/* Modal Seleção de Disciplina */}
+      {disciplinaModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold text-gray-800">
+                  {acaoSelecionada === 'aula' ? 'Registrar Aula' : 'Registrar Notas'} - Selecionar Disciplina
+                </h3>
+                <button onClick={() => setDisciplinaModal(false)} className="text-gray-500 hover:text-gray-700">
+                  <i data-feather="x" className="w-6 h-6"></i>
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="disciplina" className="block text-sm font-medium text-gray-700 mb-2">
+                    Escolha a Disciplina
+                  </label>
+                  <select 
+                    id="disciplina" 
+                    value={disciplinaSelecionada}
+                    onChange={(e) => setDisciplinaSelecionada(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Selecione uma disciplina</option>
+                    {disciplinas.map((disciplina, index) => (
+                      <option key={index} value={disciplina}>{disciplina}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2">
+                    <i data-feather={acaoSelecionada === 'aula' ? 'calendar' : 'edit-3'} className="w-5 h-5 text-blue-600"></i>
+                    <span className="text-sm text-blue-800 font-medium">
+                      {acaoSelecionada === 'aula' 
+                        ? 'Você irá registrar uma nova aula para a disciplina selecionada.' 
+                        : 'Você irá registrar notas para a disciplina selecionada.'
+                      }
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200">
+                <button 
+                  onClick={() => setDisciplinaModal(false)} 
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors duration-300"
+                >
+                  Cancelar
+                </button>
+                <button 
+                  onClick={handleDisciplinaSubmit}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300 shadow-md"
+                >
+                  Continuar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Modal Registrar Aula */}
       {registrarAulaModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -361,15 +509,9 @@ const DashboardEscola = () => {
               <form onSubmit={handleAulaSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="disciplina" className="block text-sm font-medium text-gray-700 mb-1">Disciplina</label>
-                  <input 
-                    type="text" 
-                    id="disciplina" 
-                    name="disciplina"
-                    value={aulaData.disciplina}
-                    onChange={handleAulaChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    required
-                  />
+                  <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                    {aulaData.disciplina || 'Nenhuma disciplina selecionada'}
+                  </div>
                 </div>
                 
                 <div>
@@ -459,15 +601,9 @@ const DashboardEscola = () => {
               <form onSubmit={handleNotasSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="disciplina" className="block text-sm font-medium text-gray-700 mb-1">Disciplina</label>
-                  <input 
-                    type="text" 
-                    id="disciplina" 
-                    name="disciplina"
-                    value={notasData.disciplina}
-                    onChange={handleNotasChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
+                  <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                    {notasData.disciplina || 'Nenhuma disciplina selecionada'}
+                  </div>
                 </div>
                 
                 <div>
@@ -604,6 +740,19 @@ const DashboardEscola = () => {
                 </div>
                 
                 <div>
+                  <label htmlFor="matricula" className="block text-sm font-medium text-gray-700 mb-1">Matrícula</label>
+                  <input 
+                    type="text" 
+                    id="matricula" 
+                    name="matricula"
+                    value={professorData.matricula}
+                    onChange={handleProfessorChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                    required
+                  />
+                </div>
+                
+                <div>
                   <label htmlFor="disciplina" className="block text-sm font-medium text-gray-700 mb-1">Disciplina</label>
                   <input 
                     type="text" 
@@ -670,6 +819,19 @@ const DashboardEscola = () => {
                     id="email" 
                     name="email"
                     value={alunoData.email}
+                    onChange={handleAlunoChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="matricula" className="block text-sm font-medium text-gray-700 mb-1">Matrícula</label>
+                  <input 
+                    type="text" 
+                    id="matricula" 
+                    name="matricula"
+                    value={alunoData.matricula}
                     onChange={handleAlunoChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                     required

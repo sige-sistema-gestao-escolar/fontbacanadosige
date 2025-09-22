@@ -21,6 +21,7 @@ const DashboardAluno = () => {
   const [buscaNotas, setBuscaNotas] = useState('');
   const [filtroBimestre, setFiltroBimestre] = useState('todos');
   const [filtroDisciplina, setFiltroDisciplina] = useState('todos');
+  const [perfilMenu, setPerfilMenu] = useState(false);
 
   // dados de exemplo das notas
   const [notasData] = useState([
@@ -120,7 +121,21 @@ const DashboardAluno = () => {
     if (window.feather) {
       window.feather.replace();
     }
-  }, [atestadoModal, notasModal, previewAtestadoModal, notificacao.show]);
+  }, [atestadoModal, notasModal, previewAtestadoModal, notificacao.show, perfilMenu]);
+
+  // fechar menu de perfil quando clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (perfilMenu && !event.target.closest('.relative')) {
+        setPerfilMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [perfilMenu]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -148,8 +163,41 @@ const DashboardAluno = () => {
             </div>
             <div className="flex items-center space-x-4">
               <span className="hidden md:block">Bem-vindo, Aluno</span>
-              <div className="w-10 h-10 rounded-full bg-indigo-400 flex items-center justify-center">
-                <i data-feather="user" className="w-5 h-5"></i>
+              <div className="relative">
+                <button 
+                  onClick={() => setPerfilMenu(!perfilMenu)}
+                  className="w-10 h-10 rounded-full bg-indigo-400 flex items-center justify-center hover:bg-indigo-500 transition-colors duration-200"
+                >
+                  <i data-feather="user" className="w-5 h-5"></i>
+                </button>
+                
+                {/* Menu do Perfil */}
+                {perfilMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900">Aluno</p>
+                      <p className="text-xs text-gray-500">aluno@escola.com</p>
+                    </div>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                      <i data-feather="user" className="w-4 h-4"></i>
+                      <span>Meu Perfil</span>
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                      <i data-feather="settings" className="w-4 h-4"></i>
+                      <span>Configurações</span>
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                      <i data-feather="help-circle" className="w-4 h-4"></i>
+                      <span>Ajuda</span>
+                    </button>
+                    <div className="border-t border-gray-100 mt-1 pt-1">
+                      <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2">
+                        <i data-feather="log-out" className="w-4 h-4"></i>
+                        <span>Sair</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -305,9 +353,9 @@ const DashboardAluno = () => {
 
       {/* Modal Ver Notas */}
       {notasModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl mx-4 max-h-[90vh] overflow-hidden">
-            <div className="p-6">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 flex-shrink-0">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-semibold text-gray-800">Minhas Notas</h3>
                 <button onClick={() => setNotasModal(false)} className="text-gray-500 hover:text-gray-700">
@@ -393,7 +441,10 @@ const DashboardAluno = () => {
                   <div className="text-sm text-blue-700">Total Lançadas</div>
                 </div>
               </div>
-              
+            </div>
+            
+            {/* Área com scroll */}
+            <div className="flex-1 overflow-y-auto px-6 pb-6">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
@@ -435,8 +486,21 @@ const DashboardAluno = () => {
                   </tbody>
                 </table>
               </div>
-              
-              <div className="mt-6 flex justify-end">
+            </div>
+            
+            {/* Botões de ação */}
+            <div className="flex-shrink-0 px-6 pb-6">
+              <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+                <button 
+                  onClick={() => {
+                    // aqui voce pode adicionar a logica de gerar PDF
+                    mostrarNotificacao('success', 'PDF das notas será gerado!');
+                  }}
+                  className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300 shadow-md font-medium flex items-center space-x-2"
+                >
+                  <i data-feather="download" className="w-4 h-4"></i>
+                  <span>Gerar PDF</span>
+                </button>
                 <button 
                   onClick={() => setNotasModal(false)} 
                   className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors duration-300 shadow-md font-medium"

@@ -47,17 +47,9 @@ const Login = () => {
             <img 
               src="/logo projeto.png" 
               alt="SIGE - Sistema de Gestão Educacional" 
-              className="h-32 w-auto"
+              className="h-45 "
             />
           </div>
-          {/* titulo principal */}
-          <h2 className="text-2xl font-bold text-blue-900 mb-2">
-            SIGE
-          </h2>
-          {/* subtitulo explicativo */}
-          <p className="text-sm text-blue-700 font-medium mb-1">
-            Sistema de Gestão Educacional
-          </p>
           {/* texto de boas vindas */}
           <p className="text-sm text-gray-600">
             Acesse sua conta para continuar
@@ -150,12 +142,7 @@ const Login = () => {
         
         {/* link para pagina de cadastro */}
         <div className="text-center">
-          <p className="text-sm text-gray-600">
-            Não tem uma conta? 
-            <Link to="/register" className="font-semibold text-blue-700 hover:text-blue-800 transition-colors duration-200">
-              Cadastre-se
-            </Link>
-          </p>
+          
         </div>
        </div>
     </div>

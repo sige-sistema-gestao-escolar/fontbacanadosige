@@ -36,6 +36,7 @@ const DashboardProfessor = () => {
   const [filtroPresenca, setFiltroPresenca] = useState('todos'); // todos, presentes, ausentes
   const [notificacao, setNotificacao] = useState({ show: false, tipo: '', mensagem: '' });
   const [previewModal, setPreviewModal] = useState(false);
+  const [perfilMenu, setPerfilMenu] = useState(false);
 
   const [notasData, setNotasData] = useState({
     disciplina: '',
@@ -44,6 +45,8 @@ const DashboardProfessor = () => {
     aluno: '',
     nota: ''
   });
+
+  const [previewNotasModal, setPreviewNotasModal] = useState(false);
 
   const handleAulaChange = (e) => {
     const { name, value } = e.target;
@@ -117,14 +120,26 @@ const DashboardProfessor = () => {
     setAlunos(prev => prev.map(aluno => ({ ...aluno, presente: false })));
   };
 
+  // funcao para resetar filtros
+  const resetarFiltros = () => {
+    setBuscaAluno('');
+    setFiltroPresenca('todos');
+  };
+
   // filtro de alunos
   const alunosFiltrados = alunos.filter(aluno => {
     const matchBusca = aluno.nome.toLowerCase().includes(buscaAluno.toLowerCase()) || 
                       aluno.ra.includes(buscaAluno);
     
-    if (filtroPresenca === 'presentes') return matchBusca && aluno.presente;
-    if (filtroPresenca === 'ausentes') return matchBusca && !aluno.presente;
-    return matchBusca;
+    // primeiro filtra por busca
+    if (!matchBusca) return false;
+    
+    // depois filtra por presenca
+    if (filtroPresenca === 'presentes') return aluno.presente;
+    if (filtroPresenca === 'ausentes') return !aluno.presente;
+    
+    // se for 'todos', retorna todos que passaram na busca
+    return true;
   });
 
   const handleNotasSubmit = (e) => {
@@ -132,6 +147,16 @@ const DashboardProfessor = () => {
     console.log('Dados das notas:', notasData);
     setRegistrarNotasModal(false);
     setNotasData({ disciplina: '', turma: '', bimestre: '', aluno: '', nota: '' });
+    mostrarNotificacao('success', 'Nota registrada com sucesso!');
+  };
+
+  const handlePreviewNotas = () => {
+    // validacao basica
+    if (!notasData.disciplina || !notasData.turma || !notasData.bimestre || !notasData.aluno || !notasData.nota) {
+      mostrarNotificacao('error', 'Preencha todos os campos obrigatórios!');
+      return;
+    }
+    setPreviewNotasModal(true);
   };
 
   useEffect(() => {
@@ -139,7 +164,21 @@ const DashboardProfessor = () => {
     if (window.feather) {
       window.feather.replace();
     }
-  }, [registrarAulaModal, presencaModal, previewModal, notificacao.show]);
+  }, [registrarAulaModal, presencaModal, previewModal, previewNotasModal, notificacao.show, perfilMenu]);
+
+  // fechar menu de perfil quando clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (perfilMenu && !event.target.closest('.relative')) {
+        setPerfilMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [perfilMenu]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -167,8 +206,41 @@ const DashboardProfessor = () => {
             </div>
             <div className="flex items-center space-x-4">
               <span className="hidden md:block">Bem-vindo, Professor</span>
-              <div className="w-10 h-10 rounded-full bg-indigo-400 flex items-center justify-center">
-                <i data-feather="user" className="w-5 h-5"></i>
+              <div className="relative">
+                <button 
+                  onClick={() => setPerfilMenu(!perfilMenu)}
+                  className="w-10 h-10 rounded-full bg-indigo-400 flex items-center justify-center hover:bg-indigo-500 transition-colors duration-200"
+                >
+                  <i data-feather="user" className="w-5 h-5"></i>
+                </button>
+                
+                {/* Menu do Perfil */}
+                {perfilMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900">Professor</p>
+                      <p className="text-xs text-gray-500">professor@escola.com</p>
+                    </div>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                      <i data-feather="user" className="w-4 h-4"></i>
+                      <span>Meu Perfil</span>
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                      <i data-feather="settings" className="w-4 h-4"></i>
+                      <span>Configurações</span>
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                      <i data-feather="help-circle" className="w-4 h-4"></i>
+                      <span>Ajuda</span>
+                    </button>
+                    <div className="border-t border-gray-100 mt-1 pt-1">
+                      <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2">
+                        <i data-feather="log-out" className="w-4 h-4"></i>
+                        <span>Sair</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -535,6 +607,15 @@ const DashboardProfessor = () => {
                     <i data-feather="x-circle" className="w-4 h-4 inline mr-1"></i>
                     Marcar Todos Ausentes
                   </button>
+                  {(buscaAluno || filtroPresenca !== 'todos') && (
+                    <button
+                      onClick={resetarFiltros}
+                      className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm font-medium"
+                    >
+                      <i data-feather="refresh-cw" className="w-4 h-4 inline mr-1"></i>
+                      Limpar Filtros
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -588,9 +669,14 @@ const DashboardProfessor = () => {
               {/* Botões de Ação */}
               <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
                 <div className="text-sm text-gray-600">
-                  <span className="font-medium">Total de alunos:</span> {alunosFiltrados.length} | 
-                  <span className="font-medium ml-2">Presentes:</span> {alunosFiltrados.filter(a => a.presente).length} | 
-                  <span className="font-medium ml-2">Ausentes:</span> {alunosFiltrados.filter(a => !a.presente).length}
+                  <span className="font-medium">Total de alunos:</span> {alunos.length} | 
+                  <span className="font-medium ml-2">Presentes:</span> {alunos.filter(a => a.presente).length} | 
+                  <span className="font-medium ml-2">Ausentes:</span> {alunos.filter(a => !a.presente).length}
+                  {alunosFiltrados.length !== alunos.length && (
+                    <span className="ml-2 text-blue-600">
+                      (Filtrados: {alunosFiltrados.length})
+                    </span>
+                  )}
                 </div>
                 <div className="flex space-x-3">
                   <button 
@@ -782,22 +868,114 @@ const DashboardProfessor = () => {
                   />
                 </div>
                 
-                <div className="flex justify-end space-x-3 pt-4">
+                <div className="flex justify-between pt-4">
                   <button 
                     type="button" 
-                    onClick={() => setRegistrarNotasModal(false)} 
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors duration-300"
+                    onClick={handlePreviewNotas}
+                    className="px-6 py-3 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors duration-300 font-medium"
                   >
-                    Cancelar
+                    <i data-feather="eye" className="w-4 h-4 inline mr-2"></i>
+                    Preview
                   </button>
-                  <button 
-                    type="submit" 
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300 shadow-md"
-                  >
-                    Registrar Nota
-                  </button>
+                  <div className="flex space-x-3">
+                    <button 
+                      type="button" 
+                      onClick={() => setRegistrarNotasModal(false)} 
+                      className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-300 font-medium"
+                    >
+                      Cancelar
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md font-medium"
+                    >
+                      Registrar Nota
+                    </button>
+                  </div>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Preview das Notas */}
+      {previewNotasModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-semibold text-gray-800">Preview da Nota</h3>
+                <button onClick={() => setPreviewNotasModal(false)} className="text-gray-500 hover:text-gray-700">
+                  <i data-feather="x" className="w-6 h-6"></i>
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                {/* Informações Básicas */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-4">Informações da Nota</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <span className="font-medium text-gray-700">Disciplina:</span>
+                      <p className="text-gray-900">{notasData.disciplina || 'Não informado'}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-700">Turma:</span>
+                      <p className="text-gray-900">{notasData.turma || 'Não informado'}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-700">Bimestre:</span>
+                      <p className="text-gray-900">{notasData.bimestre ? `${notasData.bimestre}º Bimestre` : 'Não informado'}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-700">Aluno:</span>
+                      <p className="text-gray-900">{notasData.aluno || 'Não informado'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Nota */}
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-800 mb-2">Nota</h4>
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="text-4xl font-bold text-blue-600">
+                        {notasData.nota || 'N/A'}
+                      </div>
+                      <div className="text-gray-600">
+                        <p className="text-sm">Pontuação de 0 a 10</p>
+                        <p className="text-sm">
+                          {notasData.nota && parseFloat(notasData.nota) >= 6 ? 
+                            '✅ Aprovado' : 
+                            notasData.nota && parseFloat(notasData.nota) < 6 ? 
+                            '❌ Reprovado' : 
+                            'Status não definido'
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200">
+                <button 
+                  onClick={() => setPreviewNotasModal(false)}
+                  className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-300 font-medium"
+                >
+                  Fechar
+                </button>
+                <button 
+                  onClick={() => {
+                    setPreviewNotasModal(false);
+                    handleNotasSubmit({ preventDefault: () => {} });
+                  }}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md font-medium"
+                >
+                  Confirmar e Registrar
+                </button>
+              </div>
             </div>
           </div>
         </div>
