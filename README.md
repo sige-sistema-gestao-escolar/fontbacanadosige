@@ -157,14 +157,3 @@ npm install
 ### Erro de ícones não aparecendo
 Os ícones Feather são carregados via CDN. Verifique sua conexão com a internet.
 
-## 📞 Suporte
-
-Se encontrar algum problema, verifique:
-1. Se o Node.js está instalado corretamente
-2. Se todas as dependências foram instaladas
-3. Se não há erros no console do navegador
-4. Se a conexão com a internet está funcionando (para os CDNs)
-
----
-
-**Desenvolvido com ❤️ para a gestão educacional**# fontbacanadosige
