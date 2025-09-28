@@ -1,74 +1,114 @@
-// importando as dependencias que a gente precisa
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Acessibilidade from './Acessibilidade';
+import GlareHover from './GlareHover';
+import IntroStepper from './IntroStepper';
+import AnimatedBackground from './AnimatedBackground';
 
-// componente principal da tela de login
 const Login = () => {
-  // estado para guardar os dados do formulario, bem simples mesmo
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     rememberMe: false
   });
 
-  // funcao que atualiza os campos quando o usuario digita algo
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value // se for checkbox usa checked, senao usa value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
-  // funcao que roda quando o usuario clica em entrar
   const handleSubmit = (e) => {
-    e.preventDefault(); // evita que a pagina recarregue
-    console.log('Dados do formulário:', formData); // so pra debugar mesmo
-    // aqui voce pode adicionar a logica de autenticacao bacana
+    e.preventDefault();
   };
 
-  // useEffect que roda quando o componente monta
+  const handleStepperComplete = () => {
+  };
+
   useEffect(() => {
-    // inicializando os icones feather pra ficar bonitinho
     if (window.feather) {
       window.feather.replace();
     }
   }, []);
 
   return (
-    // div principal com fundo gradiente bem bonito
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 flex items-center justify-center p-4">
-      {/* card principal do login */}
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-2xl border border-gray-100">
-        {/* cabecalho com logo e titulo */}
+    <div className="min-h-screen flex items-center justify-center p-4 relative">
+      <AnimatedBackground variant="login" />
+      <div className="fixed bottom-4 left-4 z-50 bg-gray-800 text-white rounded-lg shadow-lg p-3" style={{pointerEvents: 'none'}}>
+        <div className="text-xs text-gray-300 mb-2">DEV NAV</div>
+        <div className="flex flex-wrap gap-1">
+          <button 
+            onClick={() => navigate('/')} 
+            className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Home
+          </button>
+          <button 
+            onClick={() => navigate('/login')} 
+            className="px-2 py-1 bg-green-600 hover:bg-green-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Login
+          </button>
+          <button 
+            onClick={() => navigate('/register')} 
+            className="px-2 py-1 bg-purple-600 hover:bg-purple-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Register
+          </button>
+          <button 
+            onClick={() => navigate('/dashboard/aluno')} 
+            className="px-2 py-1 bg-orange-600 hover:bg-orange-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Aluno
+          </button>
+          <button 
+            onClick={() => navigate('/dashboard/professor')} 
+            className="px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Professor
+          </button>
+          <button 
+            onClick={() => navigate('/dashboard/escola')} 
+            className="px-2 py-1 bg-indigo-600 hover:bg-indigo-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Escola
+          </button>
+        </div>
+      </div>
+
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-2xl border border-slate-200 relative z-10">
         <div className="text-center">
           <div className="flex justify-center mb-6">
-            {/* logo do projeto, bem grande pra chamar atencao */}
             <img 
               src="/logo projeto.png" 
               alt="SIGE - Sistema de Gestão Educacional" 
-              className="h-45 "
+              className="h-45"
             />
           </div>
-          {/* texto de boas vindas */}
-          <p className="text-sm text-gray-600">
+          <h2 className="text-5xl font-bold text-slate-800 mb-4">SIGE</h2>
+          <p className="text-slate-600 text-xl leading-relaxed">
             Acesse sua conta para continuar
           </p>
         </div>
         
-        {/* formulario de login */}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {/* container dos campos de entrada */}
           <div className="rounded-md shadow-sm space-y-4">
-            {/* campo de email */}
             <div>
-              <label htmlFor="email" className="sr-only">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">Email</label>
               <div className="relative">
-                {/* icone de email dentro do campo */}
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <i data-feather="mail" className="h-5 w-5 text-gray-400"></i>
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <i data-feather="mail" className="h-5 w-5 text-slate-500"></i>
                 </div>
-                {/* input do email com estilos bonitos */}
                 <input 
                   id="email" 
                   name="email" 
@@ -77,21 +117,18 @@ const Login = () => {
                   required 
                   value={formData.email}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm" 
+                  className="w-full pl-14 pr-4 py-4 text-lg border border-slate-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-slate-800" 
                   placeholder="Email"
                 />
               </div>
             </div>
             
-            {/* campo de senha */}
             <div>
-              <label htmlFor="password" className="sr-only">Senha</label>
+              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">Senha</label>
               <div className="relative">
-                {/* icone de cadeado dentro do campo */}
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <i data-feather="lock" className="h-5 w-5 text-gray-400"></i>
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <i data-feather="lock" className="h-5 w-5 text-slate-500"></i>
                 </div>
-                {/* input da senha com estilos bonitos */}
                 <input 
                   id="password" 
                   name="password" 
@@ -100,16 +137,14 @@ const Login = () => {
                   required 
                   value={formData.password}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm" 
+                  className="w-full pl-14 pr-4 py-4 text-lg border border-slate-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-slate-800" 
                   placeholder="Senha"
                 />
               </div>
             </div>
           </div>
 
-          {/* area com checkbox e link de esqueci senha */}
           <div className="flex items-center justify-between">
-            {/* checkbox de lembrar-me */}
             <div className="flex items-center">
               <input 
                 id="remember-me" 
@@ -117,34 +152,45 @@ const Login = () => {
                 type="checkbox" 
                 checked={formData.rememberMe}
                 onChange={handleChange}
-                className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                className="h-4 w-4 text-blue-500 focus:ring-blue-500 border-slate-300 rounded bg-white"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="remember-me" className="ml-3 block text-base text-slate-700 font-medium">
                 Lembrar-me
               </label>
             </div>
-
-            {/* area do link de esqueci senha (vazio por enquanto) */}
             <div className="text-sm">
             </div>
           </div>
 
-          {/* botao de entrar */}
           <div>
-            <button 
-              type="submit" 
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transform hover:scale-105 transition-all duration-200 shadow-lg"
+            <GlareHover
+              width="100%"
+              height="48px"
+              background="linear-gradient(to right, #f97316, #ea580c)"
+              borderRadius="8px"
+              borderColor="transparent"
+              glareColor="#ffffff"
+              glareOpacity={0.3}
+              glareSize={200}
+              transitionDuration={600}
             >
-              Entrar
-            </button>
+              <button 
+                type="submit" 
+                className="w-full h-full accessible-button bg-transparent text-white font-semibold text-lg"
+              >
+                Entrar
+              </button>
+            </GlareHover>
           </div>
         </form>
         
-        {/* link para pagina de cadastro */}
         <div className="text-center">
           
         </div>
        </div>
+
+      <Acessibilidade />
+      <IntroStepper onComplete={handleStepperComplete} />
     </div>
   );
 };

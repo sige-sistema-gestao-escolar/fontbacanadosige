@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Acessibilidade from './Acessibilidade';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -9,13 +10,10 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    // School fields
     schoolName: '',
     schoolAddress: '',
     schoolPhone: '',
-    // Teacher fields
     teacherCpf: '',
-    // Student fields
     studentId: '',
     studentGrade: '',
     studentSchool: ''
@@ -23,6 +21,19 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    if (name === 'name' && /[0-9]/.test(value)) {
+      return;
+    }
+    
+    if ((name === 'phone' || name === 'schoolPhone') && /[a-zA-Z]/.test(value)) {
+      return;
+    }
+    
+    if (name === 'teacherCpf' && /[a-zA-Z]/.test(value)) {
+      return;
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -35,11 +46,7 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Tipo de usuário:', userType);
-    console.log('Dados do formulário:', formData);
-    // Aqui você pode adicionar a lógica de registro
     
-    // Redireciona baseado no tipo de usuário
     switch(userType) {
       case 'school':
         navigate('/dashboard/school');
@@ -56,7 +63,6 @@ const Register = () => {
   };
 
   useEffect(() => {
-    // Inicializar os ícones Feather
     if (window.feather) {
       window.feather.replace();
     }
@@ -69,8 +75,57 @@ const Register = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-xl shadow-2xl border border-gray-100">
+    <div className="min-h-screen flex items-center justify-center p-4 relative">
+      {/* terminal de navegacao pra os bacana, abaixo depois retirar */}
+      <div className="fixed bottom-4 left-4 z-50 bg-gray-800 text-white rounded-lg shadow-lg p-3" style={{pointerEvents: 'none'}}>
+        <div className="text-xs text-gray-300 mb-2">DEV NAV</div>
+        <div className="flex flex-wrap gap-1">
+          <button 
+            onClick={() => navigate('/')} 
+            className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Home
+          </button>
+          <button 
+            onClick={() => navigate('/login')} 
+            className="px-2 py-1 bg-green-600 hover:bg-green-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Login
+          </button>
+          <button 
+            onClick={() => navigate('/register')} 
+            className="px-2 py-1 bg-purple-600 hover:bg-purple-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Register
+          </button>
+          <button 
+            onClick={() => navigate('/dashboard/aluno')} 
+            className="px-2 py-1 bg-orange-600 hover:bg-orange-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Aluno
+          </button>
+          <button 
+            onClick={() => navigate('/dashboard/professor')} 
+            className="px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Professor
+          </button>
+          <button 
+            onClick={() => navigate('/dashboard/escola')} 
+            className="px-2 py-1 bg-indigo-600 hover:bg-indigo-700 rounded text-xs transition-colors"
+            style={{pointerEvents: 'auto'}}
+          >
+            Escola
+          </button>
+        </div>
+      </div>
+
+      <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-2xl border border-slate-200 relative z-10">
         <div className="text-center">
           <div className="flex justify-center mb-6">
             <img 
@@ -79,11 +134,11 @@ const Register = () => {
               className="h-80 w-80"
             />
           </div>
-          <h2 className="text-2xl font-bold text-blue-900 mb-2">
+          <h2 className="text-4xl font-bold text-slate-800 mb-4">
             Criar nova conta
           </h2>
 
-          <p className="text-sm text-gray-600">
+          <p className="text-lg text-slate-600 leading-relaxed">
             Selecione o tipo de cadastro e preencha os dados
           </p>
         </div>
@@ -116,7 +171,7 @@ const Register = () => {
                 required 
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
+                className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
               />
             </div>
              <div>
@@ -129,7 +184,7 @@ const Register = () => {
                  required 
                  value={formData.email}
                  onChange={handleChange}
-                 className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
+                 className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
                  placeholder="Digite seu email"
                />
              </div>
@@ -145,7 +200,7 @@ const Register = () => {
                 required 
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
+                className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
               />
             </div>
             <div>
@@ -157,7 +212,7 @@ const Register = () => {
                 required 
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
+                className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
               />
             </div>
           </div>
@@ -174,7 +229,7 @@ const Register = () => {
                   required
                   value={formData.schoolName}
                   onChange={handleChange}
-                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
+                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
                   placeholder="Digite o nome da escola"
                 />
               </div>
@@ -187,7 +242,7 @@ const Register = () => {
                   required
                   value={formData.schoolAddress}
                   onChange={handleChange}
-                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
+                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
                   placeholder="Digite o endereço da escola"
                 />
               </div>
@@ -200,8 +255,8 @@ const Register = () => {
                   required
                   value={formData.schoolPhone}
                   onChange={handleChange}
-                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
-                  placeholder="Digite o telefone da escola"
+                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
+                  placeholder="Apenas números"
                 />
               </div>
             </div>
@@ -219,8 +274,8 @@ const Register = () => {
                   required
                   value={formData.teacherCpf}
                   onChange={handleChange}
-                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
-                  placeholder="Digite o CPF do professor"
+                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
+                  placeholder="Apenas números"
                 />
               </div>
             </div>
@@ -237,7 +292,7 @@ const Register = () => {
                   type="text" 
                   value={formData.studentId}
                   onChange={handleChange}
-                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
+                  className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -249,7 +304,7 @@ const Register = () => {
                     type="text" 
                     value={formData.studentGrade}
                     onChange={handleChange}
-                    className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
+                    className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
                   />
                 </div>
                 <div>
@@ -260,7 +315,7 @@ const Register = () => {
                     type="text" 
                     value={formData.studentSchool}
                     onChange={handleChange}
-                    className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm"
+                    className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 placeholder-gray-400 focus:outline-none transition-all duration-200 sm:text-sm bg-white text-gray-900"
                   />
                 </div>
               </div>
@@ -281,6 +336,9 @@ const Register = () => {
 
          </div>
       </div>
+
+      {/* componente de acessibilidade */}
+      <Acessibilidade />
     </div>
   );
 };

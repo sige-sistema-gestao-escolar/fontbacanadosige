@@ -1,48 +1,1261 @@
-/* estilos globais da aplicacao */
+/* design moderno e minimalista */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #4f46e5;
+  --accent: #ea580c;
+  --success: #059669;
+  --warning: #d97706;
+  --error: #dc2626;
+  --dark-bg: #111827;
+  --dark-surface: #1f2937;
+  --dark-card: #374151;
+  --dark-border: #4b5563;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --text-large: #ffffff;
+  
+  /* variáveis de acessibilidade */
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --spacing-base: 1rem;
+  --spacing-lg: 1.5rem;
+  --focus-ring: 2px solid #3b82f6;
+  --animation-duration: 0.3s;
+  --transition-duration: 0.2s;
+  --color-filter: none;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-border) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--dark-border);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased; /* deixa as fontes mais suaves no mac */
+  background: var(--dark-bg);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.7;
+  font-size: 16px;
 }
 
-/* estilos para codigo inline */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
 }
 
-/* gradiente customizado pro projeto (nao usado mais) */
-.bg-custom-gradient {
-  background: linear-gradient(135deg, #1e3a8a 0%, #ea580c 100%);
+.modern-card {
+  background: var(--edu-card-bg);
+  border: 1px solid var(--edu-border);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
 }
 
-/* estilos dos botoes de tipo de usuario */
-.user-type-btn {
-  transition: all 0.3s ease; /* animacao suave */
+/* Tipografia moderna para cards */
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--edu-text-primary);
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.user-type-btn:hover {
-  transform: translateY(-2px); /* sobe um pouquinho no hover */
+.card-description {
+  font-size: 0.95rem;
+  color: var(--edu-text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  font-weight: 400;
 }
 
-/* efeito hover dos cards dos dashboards */
-.card-hover:hover {
-  transform: translateY(-5px); /* sobe mais que o botao */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* sombra mais pronunciada */
-  border: 1px solid rgba(249, 115, 22, 0.3); /* borda laranja sutil */
+.modern-card:hover {
+  transform: translateY(-4px);
+  background: var(--edu-card-hover);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: var(--edu-border-hover);
 }
 
-/* estilos da area de upload de arquivo */
+.modern-button {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.modern-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.modern-button:active {
+  transform: translateY(0);
+}
+
+.modern-input {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.modern-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+.modern-input::placeholder {
+  color: var(--text-muted);
+}
+
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.status-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.status-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--error);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
 .file-upload {
-  border: 2px dashed #1e3a8a; /* borda tracejada azul */
-  background-color: rgba(30, 58, 138, 0.05); /* fundo azul bem claro */
-  transition: all 0.3s ease; /* animacao suave */
+  border: 2px dashed var(--dark-border);
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 16px;
+  transition: all 0.2s ease;
 }
 
 .file-upload:hover {
-  border-color: #f97316; /* muda pra laranja no hover */
-  background-color: rgba(249, 115, 22, 0.05); /* fundo laranja claro no hover */
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.modal-overlay {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.notification {
+  background: var(--dark-surface);
+  border: 1px solid var(--dark-border);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 32px 64px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-type-btn {
+  transition: all 0.2s ease;
+}
+
+.user-type-btn:hover {
+  transform: translateY(-1px);
+}
+
+.user-type-btn.active {
+  border-color: var(--primary);
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* classes para melhor acessibilidade */
+
+.accessible-button {
+  min-height: 48px;
+  padding: 12px 24px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.accessible-input {
+  min-height: 48px;
+  padding: 12px 16px;
+  font-size: 1.125rem;
+  border-radius: 12px;
+  border: 2px solid var(--dark-border);
+  background: var(--dark-card);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.accessible-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+.accessible-input::placeholder {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+
+/* classes de acessibilidade */
+body {
+  font-size: var(--font-size-base);
+  transition: font-size var(--transition-duration) ease;
+}
+
+body * {
+  transition: all var(--transition-duration) ease;
+}
+
+/* classes para tamanho de fonte global */
+body.font-normal {
+  font-size: 18px !important;
+}
+
+body.font-normal * {
+  font-size: inherit !important;
+}
+
+body.font-large {
+  font-size: 20px !important;
+}
+
+body.font-large * {
+  font-size: inherit !important;
+}
+
+body.font-larger {
+  font-size: 22px !important;
+}
+
+body.font-larger * {
+  font-size: inherit !important;
+}
+
+body.font-largest {
+  font-size: 24px !important;
+}
+
+body.font-largest * {
+  font-size: inherit !important;
+}
+
+/* classes para cursor */
+
+/* parte daltonica - baseado em pesquisa cientifica */
+body.colorblind-normal {
+  /* cores normais */
+}
+
+/* protanopia - dificuldade com vermelho, compensa com azul e amarelo */
+body.colorblind-protanopia {
+  background: #1a1a1a !important;
+}
+
+body.colorblind-protanopia .modern-card {
+  background: #2a2a2a !important;
+  border-color: #4a4a4a !important;
+}
+
+
+/* cores principais protanopia - azul e amarelo para compensar */
+body.colorblind-protanopia .bg-orange-500,
+body.colorblind-protanopia .bg-orange-600,
+body.colorblind-protanopia .bg-orange-700 {
+  background-color: #E69F00 !important; /* amarelo dourado */
+}
+
+body.colorblind-protanopia .text-orange-400,
+body.colorblind-protanopia .text-orange-500,
+body.colorblind-protanopia .text-orange-600 {
+  color: #E69F00 !important;
+}
+
+body.colorblind-protanopia .bg-blue-500,
+body.colorblind-protanopia .bg-blue-600,
+body.colorblind-protanopia .bg-blue-700 {
+  background-color: #0072B2 !important; /* azul cientifico */
+}
+
+body.colorblind-protanopia .text-blue-400,
+body.colorblind-protanopia .text-blue-500,
+body.colorblind-protanopia .text-blue-600 {
+  color: #0072B2 !important;
+}
+
+/* deuteranopia - dificuldade com verde, compensa com azul e laranja */
+body.colorblind-deuteranopia {
+  background: #1c1c1c !important;
+}
+
+body.colorblind-deuteranopia .modern-card {
+  background: #2c2c2c !important;
+  border-color: #4c4c4c !important;
+}
+
+
+/* cores principais deuteranopia - azul claro e laranja */
+body.colorblind-deuteranopia .bg-orange-500,
+body.colorblind-deuteranopia .bg-orange-600,
+body.colorblind-deuteranopia .bg-orange-700 {
+  background-color: #D55E00 !important; /* laranja escuro */
+}
+
+body.colorblind-deuteranopia .text-orange-400,
+body.colorblind-deuteranopia .text-orange-500,
+body.colorblind-deuteranopia .text-orange-600 {
+  color: #D55E00 !important;
+}
+
+body.colorblind-deuteranopia .bg-blue-500,
+body.colorblind-deuteranopia .bg-blue-600,
+body.colorblind-deuteranopia .bg-blue-700 {
+  background-color: #56B4E9 !important; /* azul claro */
+}
+
+body.colorblind-deuteranopia .text-blue-400,
+body.colorblind-deuteranopia .text-blue-500,
+body.colorblind-deuteranopia .text-blue-600 {
+  color: #56B4E9 !important;
+}
+
+/* tritanopia - dificuldade com azul, compensa com laranja e rosa */
+body.colorblind-tritanopia {
+  background: #1e1e1e !important;
+}
+
+body.colorblind-tritanopia .modern-card {
+  background: #2e2e2e !important;
+  border-color: #4e4e4e !important;
+}
+
+
+/* cores principais tritanopia - laranja e rosa */
+body.colorblind-tritanopia .bg-orange-500,
+body.colorblind-tritanopia .bg-orange-600,
+body.colorblind-tritanopia .bg-orange-700 {
+  background-color: #E69F00 !important; /* laranja dourado */
+}
+
+body.colorblind-tritanopia .text-orange-400,
+body.colorblind-tritanopia .text-orange-500,
+body.colorblind-tritanopia .text-orange-600 {
+  color: #E69F00 !important;
+}
+
+body.colorblind-tritanopia .bg-blue-500,
+body.colorblind-tritanopia .bg-blue-600,
+body.colorblind-tritanopia .bg-blue-700 {
+  background-color: #CC79A7 !important; /* rosa cientifico */
+}
+
+body.colorblind-tritanopia .text-blue-400,
+body.colorblind-tritanopia .text-blue-500,
+body.colorblind-tritanopia .text-blue-600 {
+  color: #CC79A7 !important;
+}
+
+/* elementos visuais importantes - cores de status */
+body.colorblind-protanopia .text-green-500,
+body.colorblind-protanopia .text-green-600,
+body.colorblind-protanopia .bg-green-500,
+body.colorblind-protanopia .bg-green-600 {
+  color: #009E73 !important; /* verde cientifico */
+  background-color: #009E73 !important;
+}
+
+body.colorblind-protanopia .text-red-500,
+body.colorblind-protanopia .text-red-600,
+body.colorblind-protanopia .bg-red-500,
+body.colorblind-protanopia .bg-red-600 {
+  color: #D55E00 !important; /* laranja escuro */
+  background-color: #D55E00 !important;
+}
+
+body.colorblind-deuteranopia .text-green-500,
+body.colorblind-deuteranopia .text-green-600,
+body.colorblind-deuteranopia .bg-green-500,
+body.colorblind-deuteranopia .bg-green-600 {
+  color: #009E73 !important; /* verde cientifico */
+  background-color: #009E73 !important;
+}
+
+body.colorblind-deuteranopia .text-red-500,
+body.colorblind-deuteranopia .text-red-600,
+body.colorblind-deuteranopia .bg-red-500,
+body.colorblind-deuteranopia .bg-red-600 {
+  color: #CC79A7 !important; /* rosa cientifico */
+  background-color: #CC79A7 !important;
+}
+
+body.colorblind-tritanopia .text-green-500,
+body.colorblind-tritanopia .text-green-600,
+body.colorblind-tritanopia .bg-green-500,
+body.colorblind-tritanopia .bg-green-600 {
+  color: #009E73 !important; /* verde cientifico */
+  background-color: #009E73 !important;
+}
+
+body.colorblind-tritanopia .text-red-500,
+body.colorblind-tritanopia .text-red-600,
+body.colorblind-tritanopia .bg-red-500,
+body.colorblind-tritanopia .bg-red-600 {
+  color: #D55E00 !important; /* laranja escuro */
+  background-color: #D55E00 !important;
+}
+
+/* desabilitar animações - versão melhorada */
+body.no-animations *,
+body.no-animations *:before,
+body.no-animations *:after {
+  animation: none !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition: none !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  transform: none !important;
+}
+
+/* desabilitar animações específicas do Tailwind */
+body.no-animations .transition-all,
+body.no-animations .transition-colors,
+body.no-animations .transition-opacity,
+body.no-animations .transition-transform,
+body.no-animations .duration-200,
+body.no-animations .duration-300,
+body.no-animations .duration-500 {
+  transition: none !important;
+  transition-duration: 0s !important;
+}
+
+/* desabilitar hover effects com animação */
+body.no-animations .hover\:scale-110:hover {
+  transform: none !important;
+}
+
+body.no-animations .hover\:bg-gray-50:hover,
+body.no-animations .hover\:bg-blue-700:hover,
+body.no-animations .hover\:bg-orange-700:hover {
+  transition: none !important;
+}
+
+/* desabilitar animações do AOS e outras bibliotecas */
+body.no-animations [data-aos] {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* desabilitar animações de entrada/saída */
+body.no-animations .fade-in,
+body.no-animations .fade-out,
+body.no-animations .slide-in,
+body.no-animations .slide-out {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* classes para contraste */
+body.contrast-normal {
+  /* mantém o tema escuro padrão */
+}
+
+/* Tema branco para contraste alto - mantém identidade visual */
+body.contrast-high {
+  /* Variáveis de cores para tema branco */
+  --edu-primary: #1e40af !important; /* Azul mais escuro para contraste */
+  --edu-secondary: #047857 !important; /* Verde mais escuro para contraste */
+  --edu-accent: #d97706 !important; /* Amarelo/laranja mais escuro */
+  --edu-neutral: #4b5563 !important; /* Cinza mais escuro */
+  --edu-dark-bg: #f8fafc !important; /* Fundo branco suave */
+  --edu-card-bg: #ffffff !important; /* Cards brancos */
+  --edu-card-hover: #f1f5f9 !important; /* Hover suave */
+  --edu-text-primary: #0f172a !important; /* Texto escuro */
+  --edu-text-secondary: #475569 !important; /* Texto secundário escuro */
+  --edu-border: #e2e8f0 !important; /* Bordas claras */
+  --edu-border-hover: #cbd5e1 !important; /* Bordas hover */
+  
+  /* Aplicação global */
+  background: var(--edu-dark-bg) !important;
+  color: var(--edu-text-primary) !important;
+}
+
+body.contrast-high .modern-card {
+  background: var(--edu-card-bg) !important;
+  border: 1px solid var(--edu-border) !important;
+  color: var(--edu-text-primary) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+}
+
+body.contrast-high .modern-card:hover {
+  background: var(--edu-card-hover) !important;
+  border-color: var(--edu-border-hover) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Headers e elementos de interface */
+body.contrast-high .bg-gray-900 {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid var(--edu-border) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Header moderno para contraste alto */
+body.contrast-high .modern-header {
+  background: #1f2937 !important;
+  border-bottom: 1px solid var(--edu-border) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+body.contrast-high .modern-header::before {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.contrast-high .logo-icon {
+  background: white !important;
+  border-radius: 16px !important;
+  padding: 3px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.contrast-high .logo-icon img {
+  /* Logo mantém suas cores originais */
+}
+
+body.contrast-high .user-avatar {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+body.contrast-high .user-avatar:hover {
+  background: rgba(255, 255, 255, 0.35) !important;
+}
+
+body.contrast-high .logout-button {
+  background: rgba(239, 68, 68, 0.3) !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+}
+
+body.contrast-high .logout-button:hover {
+  background: rgba(239, 68, 68, 0.4) !important;
+}
+
+
+body.contrast-high .modern-input {
+  background: #ffffff !important;
+  border: 1px solid var(--edu-border) !important;
+  color: var(--edu-text-primary) !important;
+}
+
+body.contrast-high .modern-input::placeholder {
+  color: var(--edu-text-secondary) !important;
+}
+
+body.contrast-high .notification {
+  background: #ffffff !important;
+  border: 1px solid var(--edu-border) !important;
+  color: var(--edu-text-primary) !important;
+}
+
+/* Classes Tailwind para tema branco */
+body.contrast-high .bg-slate-900 {
+  background-color: var(--edu-dark-bg) !important;
+}
+
+body.contrast-high .bg-slate-800 {
+  background-color: var(--edu-card-bg) !important;
+}
+
+body.contrast-high .text-slate-100 {
+  color: var(--edu-text-primary) !important;
+}
+
+body.contrast-high .text-slate-400 {
+  color: var(--edu-text-secondary) !important;
+}
+
+body.contrast-high .text-slate-300 {
+  color: var(--edu-text-secondary) !important;
+}
+
+body.contrast-high .text-white {
+  color: var(--edu-text-primary) !important;
+}
+
+body.contrast-high .text-gray-400 {
+  color: var(--edu-text-secondary) !important;
+}
+
+body.contrast-high .text-gray-500 {
+  color: var(--edu-text-secondary) !important;
+}
+
+body.contrast-high .border-slate-300 {
+  border-color: var(--edu-border) !important;
+}
+
+body.contrast-high .border-slate-700 {
+  border-color: var(--edu-border) !important;
+}
+
+body.contrast-high .border-gray-700 {
+  border-color: var(--edu-border) !important;
+}
+
+body.contrast-high .border-gray-200 {
+  border-color: var(--edu-border) !important;
+}
+
+/* Botões e elementos coloridos - mantém identidade visual */
+body.contrast-high .btn-primary {
+  background: var(--edu-primary) !important;
+  color: white !important;
+  border: none !important;
+}
+
+body.contrast-high .btn-primary:hover {
+  background: #1d4ed8 !important; /* Azul mais escuro no hover */
+}
+
+body.contrast-high .btn-secondary {
+  background: var(--edu-card-bg) !important;
+  border: 1px solid var(--edu-border) !important;
+  color: var(--edu-text-primary) !important;
+}
+
+body.contrast-high .btn-secondary:hover {
+  background: var(--edu-primary) !important;
+  color: white !important;
+  border-color: var(--edu-primary) !important;
+}
+
+/* Cores azuis - mantém identidade */
+body.contrast-high .bg-blue-500,
+body.contrast-high .bg-blue-600,
+body.contrast-high .bg-blue-700,
+body.contrast-high .bg-blue-800,
+body.contrast-high .bg-blue-900 {
+  background-color: var(--edu-primary) !important;
+}
+
+body.contrast-high .text-blue-400,
+body.contrast-high .text-blue-500,
+body.contrast-high .text-blue-600 {
+  color: var(--edu-primary) !important;
+}
+
+/* Cores verdes - mantém identidade */
+body.contrast-high .bg-green-500,
+body.contrast-high .bg-green-600,
+body.contrast-high .bg-green-700 {
+  background-color: var(--edu-secondary) !important;
+}
+
+body.contrast-high .text-green-400,
+body.contrast-high .text-green-500,
+body.contrast-high .text-green-600 {
+  color: var(--edu-secondary) !important;
+}
+
+/* Cores laranjas/amarelas - mantém identidade */
+body.contrast-high .bg-orange-500,
+body.contrast-high .bg-orange-600,
+body.contrast-high .bg-orange-700 {
+  background-color: var(--edu-accent) !important;
+}
+
+body.contrast-high .text-orange-400,
+body.contrast-high .text-orange-500,
+body.contrast-high .text-orange-600 {
+  color: var(--edu-accent) !important;
+}
+
+/* Ícones com fundo - mantém identidade */
+body.contrast-high .card-icon.primary {
+  background: rgba(30, 64, 175, 0.1) !important;
+  color: var(--edu-primary) !important;
+}
+
+body.contrast-high .card-icon.secondary {
+  background: rgba(4, 120, 87, 0.1) !important;
+  color: var(--edu-secondary) !important;
+}
+
+body.contrast-high .card-icon.accent {
+  background: rgba(217, 119, 6, 0.1) !important;
+  color: var(--edu-accent) !important;
+}
+
+body.contrast-high .card-icon.neutral {
+  background: rgba(75, 85, 99, 0.1) !important;
+  color: var(--edu-neutral) !important;
+}
+
+/* Gradientes - mantém identidade visual */
+body.contrast-high .bg-gradient-to-r.from-orange-500.to-orange-600 {
+  background: linear-gradient(to right, var(--edu-accent), #b45309) !important;
+}
+
+body.contrast-high .bg-gradient-to-r.from-blue-600.to-purple-600 {
+  background: linear-gradient(to right, var(--edu-primary), #7c3aed) !important;
+}
+
+/* Bordas de foco */
+body.contrast-high .focus\\:ring-blue-500:focus {
+  --tw-ring-color: var(--edu-primary) !important;
+}
+
+body.contrast-high .focus\\:ring-orange-500:focus {
+  --tw-ring-color: var(--edu-accent) !important;
+}
+
+/* Elementos com transparência */
+body.contrast-high .bg-blue-500\/20 {
+  background-color: rgba(30, 64, 175, 0.1) !important;
+}
+
+body.contrast-high .bg-orange-500\/20 {
+  background-color: rgba(217, 119, 6, 0.1) !important;
+}
+
+body.contrast-high .bg-green-500\/20 {
+  background-color: rgba(4, 120, 87, 0.1) !important;
+}
+
+/* Estados de hover */
+body.contrast-high .hover\\:bg-blue-700:hover {
+  background-color: #1d4ed8 !important;
+}
+
+body.contrast-high .hover\\:bg-orange-700:hover {
+  background-color: #b45309 !important;
+}
+
+body.contrast-high .hover\\:from-orange-600:hover {
+  background: linear-gradient(to right, var(--edu-accent), #b45309) !important;
+}
+
+body.contrast-high .hover\\:to-orange-700:hover {
+  background: linear-gradient(to right, var(--edu-accent), #b45309) !important;
+}
+
+/* Elementos específicos - inputs e formulários */
+body.contrast-high input,
+body.contrast-high select,
+body.contrast-high textarea {
+  background-color: var(--edu-card-bg) !important;
+  border: 1px solid var(--edu-border) !important;
+  color: var(--edu-text-primary) !important;
+}
+
+body.contrast-high input::placeholder,
+body.contrast-high textarea::placeholder {
+  color: var(--edu-text-secondary) !important;
+}
+
+body.contrast-high label {
+  color: var(--edu-text-primary) !important;
+}
+
+/* Modais e overlays */
+body.contrast-high .bg-black {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+body.contrast-high .bg-white {
+  background-color: var(--edu-card-bg) !important;
+  border: 1px solid var(--edu-border) !important;
+}
+
+
+/* tamanhos de fonte dinâmicos */
+.font-large {
+  font-size: var(--font-size-lg) !important;
+}
+
+.font-larger {
+  font-size: var(--font-size-xl) !important;
+}
+
+/* espaçamento dinâmico */
+.spacing-large {
+  padding: var(--spacing-lg) !important;
+  margin: var(--spacing-lg) !important;
+}
+
+.spacing-larger {
+  padding: calc(var(--spacing-lg) * 1.5) !important;
+  margin: calc(var(--spacing-lg) * 1.5) !important;
+}
+
+/* cursor normal - removido cursor personalizado */
+
+/* foco aprimorado */
+*:focus {
+  outline: var(--focus-ring) !important;
+  outline-offset: 2px !important;
+}
+
+/* desabilitar animações */
+.no-animations * {
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+/* guia de leitura */
+.reading-guide {
+  position: relative;
+}
+
+.reading-guide::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* navegação por teclado */
+.keyboard-nav *:focus {
+  outline: 3px solid #ff0000 !important;
+  outline-offset: 2px !important;
+}
+
+/* filtros para daltonismo */
+.color-blind-protanopia {
+  filter: hue-rotate(180deg) saturate(1.5);
+}
+
+.color-blind-deuteranopia {
+  filter: hue-rotate(90deg) saturate(1.2);
+}
+
+.color-blind-tritanopia {
+  filter: hue-rotate(270deg) saturate(1.3);
+}
+
+/* contraste alto */
+.high-contrast-mode {
+  --text-primary: #000000 !important;
+  --text-secondary: #000000 !important;
+  --bg-primary: #ffffff !important;
+  --bg-secondary: #ffffff !important;
+  --dark-bg: #ffffff !important;
+  --dark-surface: #ffffff !important;
+  --dark-card: #ffffff !important;
+  --dark-border: #000000 !important;
+}
+
+/* contraste extra alto */
+.extra-high-contrast-mode {
+  --text-primary: #000000 !important;
+  --text-secondary: #000000 !important;
+  --bg-primary: #ffffff !important;
+  --bg-secondary: #ffffff !important;
+  --dark-bg: #ffffff !important;
+  --dark-surface: #ffffff !important;
+  --dark-card: #ffffff !important;
+  --dark-border: #000000 !important;
+  filter: contrast(200%) !important;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f3f4f6;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+@media (max-height: 600px) {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+  }
+}
+
+/* Paleta de cores tema escuro moderno */
+:root {
+  --edu-primary: #3b82f6; /* Azul moderno */
+  --edu-secondary: #10b981; /* Verde moderno */
+  --edu-accent: #f59e0b; /* Amarelo para alertas */
+  --edu-neutral: #6b7280; /* Cinza neutro */
+  --edu-dark-bg: #0f172a; /* Fundo escuro principal */
+  --edu-card-bg: #1e293b; /* Cards escuros */
+  --edu-card-hover: #334155; /* Cards hover */
+  --edu-text-primary: #f8fafc; /* Texto principal claro */
+  --edu-text-secondary: #cbd5e1; /* Texto secundário claro */
+  --edu-border: #374151; /* Bordas sutis escuras */
+  --edu-border-hover: #4b5563; /* Bordas hover */
+}
+
+/* Botões tema escuro moderno */
+.btn-primary {
+  background: var(--edu-primary);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-secondary {
+  background: var(--edu-card-hover);
+  border: 1px solid var(--edu-border);
+  border-radius: 8px;
+  color: var(--edu-text-primary);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-secondary:hover {
+  background: var(--edu-primary);
+  border-color: var(--edu-primary);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-secondary:disabled {
+  background: var(--edu-card-bg);
+  border-color: var(--edu-border);
+  color: var(--edu-text-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-secondary:disabled:hover {
+  background: var(--edu-card-bg);
+  border-color: var(--edu-border);
+  color: var(--edu-text-secondary);
+  transform: none;
+}
+
+/* Ícones tema escuro moderno */
+.card-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.5rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-icon.primary {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--edu-primary);
+}
+
+.card-icon.secondary {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--edu-secondary);
+}
+
+.card-icon.accent {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--edu-accent);
+}
+
+.card-icon.neutral {
+  background: rgba(107, 114, 128, 0.2);
+  color: var(--edu-neutral);
+}
+
+.card-icon i {
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.5;
+}
+
+/* Header moderno para dashboards */
+.modern-header {
+  background: #111827;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.modern-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+.header-content {
+  position: relative;
+  z-index: 10;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 16px;
+  padding: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo-icon img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.logo-icon i {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.header-title {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.header-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 0.125rem;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.user-avatar:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+.user-avatar i {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.user-name {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.user-role {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 0.125rem;
+}
+
+.logout-button {
+  width: 36px;
+  height: 36px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.logout-button:hover {
+  background: rgba(239, 68, 68, 0.3);
+  transform: scale(1.05);
+}
+
+.logout-button i {
+  width: 16px;
+  height: 16px;
+  color: #fca5a5;
+}
+
+/* Menu do usuário */
+.user-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 50;
+  min-width: 200px;
+}
+
+.user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #374151;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-menu-item:hover {
+  background: #f3f4f6;
+}
+
+.user-menu-item i {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+}
+
+.user-menu-item.logout {
+  color: #dc2626;
+  border-top: 1px solid #e5e7eb;
+}
+
+.user-menu-item.logout:hover {
+  background: #fef2f2;
+}
+
+.user-menu-item.logout i {
+  color: #dc2626;
+}
+
+/* Efeito de brilho sutil */
+.glow-effect {
+  box-shadow: 0 0 20px rgba(66, 133, 244, 0.3);
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 30px rgba(66, 133, 244, 0.5);
 }
